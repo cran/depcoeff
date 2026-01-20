@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include <cmath>  
+#include <cmath>
 using namespace Rcpp;
 
 double psiC(double x,int id,double par){
@@ -31,7 +31,7 @@ double psiC(double x,int id,double par){
 //' @importFrom Rcpp evalCpp
 //' @keywords internal
 // [[Rcpp::export]]
-NumericVector coeffpml(NumericVector u1, NumericVector v1, NumericVector u2, NumericVector v2, double amin, 
+NumericVector coeffpml(NumericVector u1, NumericVector v1, NumericVector u2, NumericVector v2, double amin,
 double parp, double parh, long int n, long int na, int mf)
 { long int i,j,jj,k,l,im,imm,id;
   double h,hh,f0,u1mr,u2mr;
@@ -39,7 +39,7 @@ double parp, double parh, long int n, long int na, int mf)
   par[0] = 0.0;
   par[1] = 0.0;
   par[2] = parp;
-  par[3] = parh;  
+  par[3] = parh;
   psiqf[0] = 0.166666666667;
   psiqf[1] = 0.333333333333;
   psiqf[2] = 2.0/(parp*(parp+3.0)+2.0);
@@ -47,7 +47,7 @@ double parp, double parh, long int n, long int na, int mf)
 
   k = u1.size();
   l = u2.size();
-   
+
   NumericMatrix s(n-na+1,8);
   /* main loop */
   for (j=na;j<=n-na;++j){
@@ -55,34 +55,34 @@ double parp, double parh, long int n, long int na, int mf)
     if (mf==1) { f0=jj;} else {
 		if (mf==2) {f0=jj+1;} else {f0=sqrt(jj*jj-1.0);}}
 	for (id=0;id<4;++id) { s(jj,id)= 0.0; s(j,id+4)=0.0;}  /*initialization of s*/
-    /* left-side part: for data with rank<=n-j*/ 
+    /* left-side part: for data with rank<=n-j*/
 	u1mr = 0;   /* maximum rank of u1 */
-    for (i=0;i<k;++i) {    
+    for (i=0;i<k;++i) {
 	  h = (u1[i]-v1[i])/f0;        /*normed difference of ranks of x and y */
 	  for (id=0;id<4;++id) {
         s(jj,id) += psiC(h,id+1,par[id]); /* psi function */
       }
-      if (u1[i] > u1mr) { im = i; u1mr = u1[i];}   /* highest rank of u1 at im */ 
+      if (u1[i] > u1mr) { im = i; u1mr = u1[i];}   /* highest rank of u1 at im */
     }
-     
+
     /* right-side part: for data with rank >j*/
 	u2mr = n;   /* minimum rank of u2 */
     for (i=0;i<l;++i) {
 	  h = (u2[i]+v2[i]-1.0)/f0;
-      for (id=0;id<4;++id) { 
+      for (id=0;id<4;++id) {
         s(j,id+4) += psiC(-1.0+h,id+1,par[id]);  /* psi function  */
       }
       if (u2[i] < u2mr) { imm=i; u2mr = u2[i];}  /* smallest rank of u2 at imm */
     }
-     
-    if (j<n-na) {  
+
+    if (j<n-na) {
       k= k-1; hh= v1[im];  /*hh= value v1 at maximum u1-rank*/
       if (im<k){
       for (i=im;i<k;++i){  /*delete the pair of data with highest u1-rank*/
         u1[i]= u1[i+1];
         v1[i]= v1[i+1];
       }}
-	 
+
       if (u1mr<k+1) {   /* handling of ties */
 		for (i=0;i<k;++i){ if (u1[i]==u1mr) {u1[i] -= 0.5;} }
       }
@@ -90,13 +90,13 @@ double parp, double parh, long int n, long int na, int mf)
         if (v1[i]>hh) {v1[i] -= 1;} else {
 			if (v1[i]==hh)  {v1[i] -= 0.5;}}   /* ties */
       }
-	  
+
       l= l-1; hh= v2[imm];   /*hh= value v2 at minimum u2-rank*/
       for (i=imm;i<l;++i){  /*delete the pair of data with smallest u2-rank */
         u2[i]= u2[i+1];
         v2[i]= v2[i+1];
       }
-      
+
       for (i=0;i<l;++i){  /* update the ranking for X, Y*/
         if ((u2mr>1.0)&&(u2[i]==u2mr)) {u2[i] -= 0.5;} else {u2[i] -=1;} /* ties in X */
         if (v2[i]>hh) {v2[i] -=1;} else {
@@ -104,17 +104,17 @@ double parp, double parh, long int n, long int na, int mf)
       }
     }
   }
-  
+
   for (id=0;id<4;++id) {
     m[id]= -10000.0;
     for (j=na;j<=n-na;++j){
-      s(j,id) = 1.0 - (s(j,id)+s(j,id+4))/(n*psiqf[id]); 
+      s(j,id) = 1.0 - (s(j,id)+s(j,id+4))/(n*psiqf[id]);
       if (s(j,id)>m[id]) {
         m[id]= s(j,id);
         m[id+4]= j;
       }
     }
   }
- 
+
   return(m);
-}  
+}

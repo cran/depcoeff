@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // coeffpml
 NumericVector coeffpml(NumericVector u1, NumericVector v1, NumericVector u2, NumericVector v2, double amin, double parp, double parh, long int n, long int na, int mf);
 RcppExport SEXP _depcoeff_coeffpml(SEXP u1SEXP, SEXP v1SEXP, SEXP u2SEXP, SEXP v2SEXP, SEXP aminSEXP, SEXP parpSEXP, SEXP parhSEXP, SEXP nSEXP, SEXP naSEXP, SEXP mfSEXP) {

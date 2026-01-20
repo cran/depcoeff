@@ -34,5 +34,5 @@ data <- gilgais
 kendr(data[,1:3],data[,4],out=1)
 }
 \references{
-Eckhard Liebscher (2019). Kendall regression Coefficient. submitted
+Eckhard Liebscher (2019). Kendall regression coefficient. Computational Statistics and Data Analysis 157 (2021). 107140
 }

@@ -37,5 +37,5 @@ data<- gilgais
 spearrs(data[,1:2],data[,3],splitp=c(0.4,0.6))
 }
 \references{
-Eckhard Liebscher (2019). A copula-based dependence measure for regression analysis. submitted
+Eckhard Liebscher (2021). On a multivariate version of Spearman's correlation coefficient for regression: Properties and Applications. Asian Journal of Statistical Sciences 1 (2021), No. 2, 123-150.
 }

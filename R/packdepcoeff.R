@@ -69,7 +69,6 @@ zetamin<- function(id,par=-1){
 #' data<- gilgais
 #' zetac(data[,1],data[,2])
 #' @export
-
 zetac<- function(x,y,method="Spearman",methodF=1,parH=0.5,parp=1.5){
   n<- length(x)
   if (n!=length(y)){ stop("number of sample items in x and y are different")} #check the parameters
@@ -153,7 +152,6 @@ zetac<- function(x,y,method="Spearman",methodF=1,parH=0.5,parp=1.5){
 #' data<- gilgais
 #' zetapm(data[,1],data[,2])
 #' @export
-
 zetapm<- function(x,y,amin=0.25,method="all",methodF=1,parp=1.5,parH=0.5){
   n<- length(x)
   if (n!=length(y)){ stop("number of sample items in x and y are different")} #check the parameters
@@ -234,8 +232,6 @@ zetapm<- function(x,y,amin=0.25,method="all",methodF=1,parp=1.5,parH=0.5){
 #' data<- gilgais
 #' zetaci(data[, 1], data[, 2], a=c(0.25, 0.5, 0.75))
 #' @export
-
-
 zetaci<- function(x,y,a,method="Spearman",methodF=1,parH=0.5,parp=1.5){
   if ((parp<=0.0)|(parH<=0.0)|(parH>=1.0)|(min(a)<=0.0)|(max(a)>=1.0)){
     stop("parameter(s) not valid")}  #check the parameters
@@ -345,13 +341,12 @@ zetaci<- function(x,y,a,method="Spearman",methodF=1,parH=0.5,parp=1.5){
 #' value -1 refers to regressors leading to decreasing y whenever this regressor increases.
 #' If direction=NULL, then all coefficients are computed.
 #' @return list of Spearman regression coefficients for several directions
-#' @references Eckhard Liebscher (2019). A copula-based dependence measure for regression analysis. submitted
+#' @references Eckhard Liebscher (2021). On a multivariate version of Spearman's correlation coefficient for regression: Properties and Applications. Asian Journal of Statistical Sciences 1 (2021), No. 2, 123-150.
 #' @examples
 #' library(MASS)
 #' data <- gilgais
 #' spearr(data[,1:3],data[,4],out=1)
 #' @export
-
 spearr<-function(x,y,direction=NULL,out=0){
   d<- length(x[1,])
   if (is.null(direction)) { ka<-(2^(d-1)-1)} else {   #check the parameters
@@ -428,13 +423,12 @@ spearr<-function(x,y,direction=NULL,out=0){
 #'   direction ++ means that y increases whenever both regressors increases
 #'   direction +- means that y increases whenever the first regressor increases and the
 #' other regressor decreases..etc.
-#' @references Eckhard Liebscher (2019). A copula-based dependence measure for regression analysis. submitted
+#' @references Eckhard Liebscher (2021). On a multivariate version of Spearman's correlation coefficient for regression: Properties and Applications. Asian Journal of Statistical Sciences 1 (2021), No. 2, 123-150.
 #' @examples
 #' library(MASS)
 #' data<- gilgais
 #' spearrs(data[,1:2],data[,3],splitp=c(0.4,0.6))
 #' @export
-
 spearrs<-function(x,y,splitp=NULL){
   nn<- length(y)
   if (length(x[,1])!=nn){ stop("number of sample items in x and y are different")} #check the parameters
@@ -533,42 +527,41 @@ spearrs<-function(x,y,splitp=NULL){
 #' value -1 refers to regressors leading to decreasing y whenever this regressor increases.
 #' If direction=NULL, then all coefficients are computed.
 #' @return list of Kendall regression coefficients for several directions
-#' @references Eckhard Liebscher (2019). Kendall regression Coefficient. submitted
+#' @references Eckhard Liebscher (2019). Kendall regression coefficient. Computational Statistics and Data Analysis 157 (2021). 107140
 #' @examples
 #' library(MASS)
 #' data <- gilgais
 #' kendr(data[,1:3],data[,4],out=1)
 #' @export
-
 kendr<-function(x,y,direction=NULL,out=0){
   nn<- length(y)
   d<- length(x[1,])
-  msr<- -10.0 #maximaler Koeffizient
+  msr<- -10.0 #maximum coefficient
   if (is.null(direction)) { ka<-(2^(d-1)-1)} else {ka<- 0}
   ret<- list()
 
   for (k in ka:0){
     u<- as.matrix(x)
     if (ka>0){
-      direction<- 2*as.numeric(c(1,intToBits(k)[1:(d-1)]))-1   #Vorzeichenfaktoren als Vektor, X1 immer plus
+      direction<- 2*as.numeric(c(1,intToBits(k)[1:(d-1)]))-1   #sign factor as vector, X1 always plus
       if (k!=ka)  {
         for (j in 1:d){
           if (direction[j]<0) {u[,j]<- -x[,j]}
         }}
-    } else {  #  Fall ka=0
+    } else {  #  case ka=0
       u<- x
       for (j in 1:d){
         if (direction[j]<0) {u[,j]<- -x[,j] }
       }
     }
     v<- as.matrix(cbind(u,y))
-    A<-(sum(copula::F.n(u,u,offset = 0, smoothing = "none"))-1.0)/(nn-1.0) #Nenner
-    B<-(sum(copula::F.n(v,v,offset = 0, smoothing = "none"))-1.0)/(nn-1.0) #Zaehler
-    if (out==1){   # Ausgabe aller Koeffizienten
+    A<-(sum(copula::F.n(u,u,offset = 0, smoothing = "none"))-1.0)/(nn-1.0) #numerator
+    B<-(sum(copula::F.n(v,v,offset = 0, smoothing = "none"))-1.0)/(nn-1.0) #denominator
+    if (out==1){   # output of all coefficients
       if (A==0.0) {ret[[k+1]]<- list(dcoeff="not defined",dir=direction)
-      }else{ret[[k+1]]<- list(dcoeff=2*B/A-1.0,dir=direction)}  #An,Bn,
+      }else{ret[[k+1]]<- list(dcoeff=2*B/A-1.0,dir=direction)}  #coefficient
     }else{
-      if (A!=0.0){  ##reduzierte Ausgabe des betragsm. größten Wertes
+      if (A!=0.0){  ##reduced output of largest absolute value
         h<- 2*B/A-1.0
         if (abs(h)>msr) {
           msr<- abs(h)
@@ -601,13 +594,12 @@ kendr<-function(x,y,direction=NULL,out=0){
 #' direction ++ means that y increases whenever both regressors increases
 #' direction +- means that y increases whenever the first regressor increases and the
 #' other regressor decreases..etc.
-#' @references Eckhard Liebscher (2019). Kendall regression coefficient. submitted
+#' @references Eckhard Liebscher (2019). Kendall regression coefficient. Computational Statistics and Data Analysis 157 (2021). 107140
 #' @examples
 #' library(MASS)
 #' data<- gilgais
 #' kendrs(data[,1:2],data[,3],splitp=c(0.4,0.6))
 #' @export
-
 kendrs<-function(x,y,splitp=NULL){
   nn<- length(y)
   cg<- 0.0  # total coefficient
