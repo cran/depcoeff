@@ -7,7 +7,7 @@
 spearrs(x,y,splitp=NULL)
 }
 \arguments{
-\item{x}{datamatrix of regressor variables with two columns,}
+\item{x}{data matrix of regressor variables with two columns,}
 
 \item{y}{data vector of the target variable}
 
@@ -18,18 +18,23 @@ of the remaining data items. The same is done for the second regressor. As the
 result we obtain 4 subregions of the regressor domain. default=c(0.5,0.5)}
 }
 \value{
-list of Kendall regression coefficients for the 4 split regions
-and the total coefficient together with the corresponding optimal directions.
-  direction ++ means that y increases whenever both regressors increases
-  direction +- means that y increases whenever the first regressor increases and the
+A list of Spearman regression coefficients for the 4 split regions
+(11=left lower region, 12=left upper region...) with components:
+  \describe{
+    \item{dcoeff++}{split coefficient ++}
+    \item{dcoeff+-}{split coefficient +-}
+    \item{totalcoeff}{total coefficient}
+    \item{directions}{optimal directions for the several split regions}
+  }
+direction ++ means that y increases whenever both regressors increases
+direction +- means that y increases whenever the first regressor increases and the
 other regressor decreases..etc.
 }
 \description{
 The function spearrs evaluates the multivariate Spearman regression coefficient
 for two regressors and split regressor region.
-It describes how well the target variable can be fit in each split region
-by a function which is increasing w.r.t. some regressors and decreasing
-w.r.t. the other regressors.
+It describes how well the response variable can be fitted in each split region
+by a function which increases or decreases as the regressors increase.
 }
 \examples{
 library(MASS)
@@ -37,5 +42,7 @@ data<- gilgais
 spearrs(data[,1:2],data[,3],splitp=c(0.4,0.6))
 }
 \references{
-Eckhard Liebscher (2021). On a multivariate version of Spearman's correlation coefficient for regression: Properties and Applications. Asian Journal of Statistical Sciences 1 (2021), No. 2, 123-150.
+Eckhard Liebscher (2021). On a multivariate version of Spearman's
+correlation coefficient for regression: Properties and Applications. Asian Journal
+of Statistical Sciences 1, No. 2, 123-150.
 }

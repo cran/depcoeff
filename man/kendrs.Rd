@@ -7,9 +7,9 @@
 kendrs(x,y,splitp=NULL)
 }
 \arguments{
-\item{x}{datamatrix of regressor variables with two columns,}
+\item{x}{data matrix of regressor variables with two columns,}
 
-\item{y}{data vector of the target variable}
+\item{y}{data vector of the response variable}
 
 \item{splitp}{vector of length 2 of the splitting points,
 If p1 is the first component of this vector, then the point splits the domain of the
@@ -18,8 +18,14 @@ of the remaining data items. The same is done for the second regressor. As the
 result we obtain 4 subregions of the regressor domain. default=c(0.5,0.5)}
 }
 \value{
-list of Kendall regression coefficients for the 4 split regions
-and the total coefficient together with the corresponding optimal directions.
+A list of Kendall regression coefficients for the 4 split regions
+(11=left lower region, 12=left upper region...) with components
+  \describe{
+    \item{dcoeff++}{split coefficient ++}
+    \item{dcoeff+-}{split coefficient +-}
+    \item{totalcoeff}{total coefficient}
+    \item{directions}{optimal directions}
+  }
 direction ++ means that y increases whenever both regressors increases
 direction +- means that y increases whenever the first regressor increases and the
 other regressor decreases..etc.
@@ -27,9 +33,8 @@ other regressor decreases..etc.
 \description{
 The function kendrs evaluates the multivariate Kendall regression coefficient
 for two regressors and split regressor region.
-It describes how well the target variable can be fit in each split region
-by a function which is increasing w.r.t. some regressors and decreasing
-w.r.t. the other regressors.
+It describes how well the response variable can be fitted in each split region
+by a function which increases or decreases as the regressors increase.
 }
 \examples{
 library(MASS)
@@ -37,5 +42,5 @@ data<- gilgais
 kendrs(data[,1:2],data[,3],splitp=c(0.4,0.6))
 }
 \references{
-Eckhard Liebscher (2019). Kendall regression coefficient. Computational Statistics and Data Analysis 157 (2021). 107140
+Eckhard Liebscher (2021). Kendall regression coefficient. Computational Statistics and Data Analysis 157 (2021). 107140
 }

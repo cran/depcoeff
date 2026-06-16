@@ -16,11 +16,15 @@ value 1 refers to regressors leading to increasing y whenever this regressor inc
 value -1 refers to regressors leading to decreasing y whenever this regressor increases.
 If direction=NULL, then all coefficients are computed.}
 
-\item{out}{value 1: full output, value 0: reduced output, only coefficients
-that are largest in absolute value}
+\item{out}{value 1: full output, value 0: reduced output, only coefficient
+that is largest in absolute value}
 }
 \value{
-list of Spearman regression coefficients for several directions
+A list containing
+  \describe{
+    \item{dcoeff}{Spearman regression coefficient}
+    \item{dir}{direction vector}
+    }
 }
 \description{
 The function spearr evaluates the multivariate Spearman regression coefficient.
@@ -34,5 +38,7 @@ data <- gilgais
 spearr(data[,1:3],data[,4],out=1)
 }
 \references{
-Eckhard Liebscher (2021). On a multivariate version of Spearman's correlation coefficient for regression: Properties and Applications. Asian Journal of Statistical Sciences 1 (2021), No. 2, 123-150.
+Eckhard Liebscher (2021). On a multivariate version of Spearman's
+correlation coefficient for regression: Properties and Applications. Asian Journal
+of Statistical Sciences 1, No. 2, 123-150.
 }

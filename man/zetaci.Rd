@@ -25,12 +25,14 @@ parH are between 0 and 1.}
 to be positive.}
 }
 \value{
-list of zeta dependence coefficients of piecewise monotonicity of two
+A list of zeta dependence coefficients of piecewise monotonicity of two
 random variables containing the following elements:
-  Spearman...Spearman coefficient
-  footrule...Spearman's footrule
-  power...power coefficient
-  Huber...Huber function coefficient
+  \describe{
+    \item{Spearman}{zeta Spearman plusminus/minusplus coefficient}
+    \item{footrule}{zeta Spearman's footrule plusminus/minusplus coefficient}
+    \item{power}{zeta power plusminus/minusplus coefficient}
+    \item{Huber}{zeta Huber plusminus/minusplus coefficient}
+  }
 }
 \description{
 The function zetaci evaluates the coefficient of piecewise monotonicity of variables x and y where the x-domain
@@ -46,8 +48,10 @@ The values of the distribution function of \eqn{Y} are treated analogously.
 }
 \examples{
 library(MASS)
-data<- gilgais
-zetaci(data[, 1], data[, 2], a=c(0.25, 0.5, 0.75))
+x<- seq(0,1.0,by=0.01)
+eps<- rnorm(length(x),sd=0.05)
+y<- x-2*(x>=0.4)*(x-0.4)+4*(x>=0.75)*(x-0.75)+eps
+zetaci(x,y, a=c(0.25, 0.5, 0.75))
 }
 \references{
 Eckhard Liebscher (2017). Copula-based dependence measures for piecewise

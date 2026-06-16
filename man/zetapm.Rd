@@ -28,12 +28,14 @@ to be positive.}
 are between 0 and 1.}
 }
 \value{
-list of zeta dependence coefficients (plusminus coefficient and minusplus one)
-of piecewise monotonicity of two random variables containing the
-following elements or a subset of it in this order:
-Spearman coefficient, footrule, power coefficient, Huber function coefficient.
-position1 and position2 indicate the number of the sample items where the optimized
-split point is located
+A list of zeta dependence coefficients of piecewise monotonicity of two
+random variables containing the following elements:
+  \describe{
+    \item{plusminuscoeff}{zeta plusminus coefficients: Spearman, footrule, power, Huber coefficients if chosen}
+    \item{position1}{positions of the optimal split points within the x-value (zeta plusminus coefficients)}
+    \item{minuspluscoeff}{zeta minuspluscoeff coefficients: Spearman, footrule, power, Huber coefficients if chosen}
+    \item{position2}{positions of the optimal split points within the x-value (zeta minusplus coefficients)}
+    }
 }
 \description{
 zetapm is a function to evaluate the zeta dependence coefficients of piecewise
@@ -51,9 +53,10 @@ for the estimators of values \eqn{F(X_{i})} of the distribution function:
 The values of the distribution function of \eqn{Y} are treated analogously.
 }
 \examples{
-library(MASS)
-data<- gilgais
-zetapm(data[,1],data[,2])
+x<- seq(0,1.0,by=0.01)
+eps<- rnorm(length(x),sd=0.05)
+y<- x-2*(x>=0.4)*(x-0.4)+eps
+zetapm(x,y,amin=0.2,method="all",methodF=1,parp=1.5,parH=0.5)
 }
 \references{
 Eckhard Liebscher (2017). Copula-based dependence measures for piecewise
